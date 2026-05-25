@@ -1,14 +1,17 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export const Logo = () => {
   return (
-    <Image
-      src="/baseline_b89c89.svg"
-      alt="Oroymiel"
-      width={360}
-      height={288}
-      className="h-auto w-55 sm:w-75"
-      priority
-    />
+    <Link href="/" className="flex items-center gap-2">
+      <Image
+        src="/baseline_b89c89.svg"
+        alt="Spa Oro y Miel by Lismar - El ritual que tu cuerpo merece"
+        width={360}
+        height={288}
+        className="h-auto w-55 sm:w-75"
+        priority
+      />
+    </Link>
   );
 };

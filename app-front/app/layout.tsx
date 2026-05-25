@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Cormorant_Garamond, Nunito_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import Header from "@/components/Header";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -17,8 +18,8 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Oroymiel",
-  description: "Site de presentation Oroymiel",
+  title: "Oro y Miel Spa",
+  description: "El ritual que tu cuerpo merece",
 };
 
 export default function RootLayout({
@@ -35,7 +36,10 @@ export default function RootLayout({
         cormorantGaramond.variable,
       )}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
