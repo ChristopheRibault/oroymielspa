@@ -66,7 +66,28 @@ export default defineType({
             defineField({ name: "title", title: "Title", type: "string" }),
             defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
             defineField({ name: "price", title: "Price", type: "string" }),
+            defineField({
+              name: "image",
+              title: "Image",
+              type: "image",
+              options: { hotspot: true },
+            }),
           ],
+        }),
+      ],
+    }),
+    defineField({
+      name: "about",
+      title: "About section",
+      type: "object",
+      fields: [
+        defineField({ name: "title", title: "Title", type: "string" }),
+        defineField({ name: "text", title: "Text", type: "text", rows: 4 }),
+        defineField({
+          name: "image",
+          title: "Image",
+          type: "image",
+          options: { hotspot: true },
         }),
       ],
     }),

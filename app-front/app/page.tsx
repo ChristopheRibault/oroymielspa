@@ -3,46 +3,100 @@ import Link from "next/link";
 import { Title } from "@/components/ui/title";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getHomePage, getSiteSettings } from "@/lib/sanity";
 
-export default function Home() {
+const defaultHighlights = [
+  "Atención personalizada",
+  "Productos profesionales",
+  "Ambiente relajante",
+];
+
+const defaultFeaturedServices = [
+  {
+    title: "Faciales",
+    description: "Rituales de limpieza e hidratación.",
+    price: "Desde $450 MXN",
+    imageUrl: "/faciales.png",
+  },
+  {
+    title: "Rituales relajantes",
+    description: "Masajes para cuerpo y mente.",
+    price: "Desde $350 MXN",
+    imageUrl: "/rituales.png",
+  },
+  {
+    title: "Post operatorio",
+    description: "Acompañamiento de recuperación.",
+    price: "Desde $4,500 MXN",
+    imageUrl: "/operatorio.png",
+  },
+];
+
+export default async function Home() {
+  const [homePage, settings] = await Promise.all([
+    getHomePage(),
+    getSiteSettings(),
+  ]);
+
+  const highlights =
+    homePage?.highlights && homePage.highlights.length > 0
+      ? homePage.highlights
+      : defaultHighlights;
+
+  const featuredServices =
+    homePage?.featuredServices && homePage.featuredServices.length > 0
+      ? homePage.featuredServices.map((service, index) => ({
+          title: service.title,
+          description: service.description,
+          price: service.price,
+          imageUrl:
+            service.image?.asset?.url ??
+            defaultFeaturedServices[index]?.imageUrl ??
+            "/salon.png",
+        }))
+      : defaultFeaturedServices;
+
+  const primaryCtaHref =
+    homePage?.primaryCtaHref ?? settings?.bookingUrl ?? "/contacto";
+  const secondaryCtaHref = homePage?.secondaryCtaHref ?? "/servicios";
+
   return (
     <main className="min-h-screen px-6 py-10 sm:px-10">
       <section className="mx-auto grid max-w-6xl items-start gap-6 md:grid-cols-2">
         <div>
           <Title as="h1" className="mb-4">
-            El ritual que tu cuerpo merece
+            {homePage?.heroTitle ?? "El ritual que tu cuerpo merece"}
           </Title>
           <p className="max-w-xl text-lg leading-relaxed text-[#5f534a]">
-            En Oro y Miel Spa te ofrecemos tratamientos personalizados para
-            ayudarte a relajarte, recuperar tu bienestar y sentirte mejor cada
-            día.
+            {homePage?.heroText ??
+              "En Oro y Miel Spa te ofrecemos tratamientos personalizados para ayudarte a relajarte, recuperar tu bienestar y sentirte mejor cada día."}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/contacto"
+              href={primaryCtaHref}
               className={cn(
                 buttonVariants({ variant: "outline" }),
                 "h-auto border-[0.8px] border-[#6e5b4e]/70 bg-transparent px-4 py-2 font-heading text-[1.18rem] leading-none text-[#6e5b4e] hover:bg-[#e8ded2]",
               )}
             >
-              Reservar cita
+              {homePage?.primaryCtaLabel ?? "Reservar cita"}
             </Link>
             <Link
-              href="/servicios"
+              href={secondaryCtaHref}
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "h-auto px-4 py-2 font-heading text-[1.18rem] leading-none text-[#6e5b4e] hover:bg-[#e8ded2]",
               )}
             >
-              Ver servicios
+              {homePage?.secondaryCtaLabel ?? "Ver servicios"}
             </Link>
           </div>
         </div>
 
         <Image
-          src="/salon.png"
-          alt="Interior de Oro y Miel Spa"
+          src={homePage?.heroImage?.asset?.url ?? "/salon.png"}
+          alt={homePage?.heroImage?.alt ?? "Interior de Oro y Miel Spa"}
           width={300}
           height={300}
           className="h-auto max-h-75 w-full rounded-xl object-cover"
@@ -51,15 +105,14 @@ export default function Home() {
       </section>
 
       <section className="mx-auto mt-8 grid max-w-6xl grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-lg bg-[#f8f2eb]/70 px-4 py-3 text-[#5f534a]">
-          Atención personalizada
-        </div>
-        <div className="rounded-lg bg-[#f8f2eb]/70 px-4 py-3 text-[#5f534a]">
-          Productos profesionales
-        </div>
-        <div className="rounded-lg bg-[#f8f2eb]/70 px-4 py-3 text-[#5f534a]">
-          Ambiente relajante
-        </div>
+        {highlights.map((highlight, index) => (
+          <div
+            key={`${highlight}-${index}`}
+            className="rounded-lg bg-[#f8f2eb]/70 px-4 py-3 text-[#5f534a]"
+          >
+            {highlight}
+          </div>
+        ))}
       </section>
 
       <section className="mx-auto mt-14 max-w-6xl">
@@ -68,69 +121,42 @@ export default function Home() {
         </Title>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          <article className="rounded-lg bg-[#f8f2eb]/70 p-4">
-            <Image
-              src="/faciales.png"
-              alt="Servicio facial"
-              width={500}
-              height={320}
-              className="mb-4 h-44 w-full rounded-lg object-cover"
-            />
-            <Title as="h3" className="mb-2 text-2xl">
-              Faciales
-            </Title>
-            <p className="text-[#5f534a]">
-              Rituales de limpieza e hidratación.
-            </p>
-            <p className="mt-2 font-medium text-[#6e5b4e]">Desde $450 MXN</p>
-          </article>
-
-          <article className="rounded-lg bg-[#f8f2eb]/70 p-4">
-            <Image
-              src="/rituales.png"
-              alt="Masaje relajante"
-              width={500}
-              height={320}
-              className="mb-4 h-44 w-full rounded-lg object-cover"
-            />
-            <Title as="h3" className="mb-2 text-2xl">
-              Rituales relajantes
-            </Title>
-            <p className="text-[#5f534a]">Masajes para cuerpo y mente.</p>
-            <p className="mt-2 font-medium text-[#6e5b4e]">Desde $350 MXN</p>
-          </article>
-
-          <article className="rounded-lg bg-[#f8f2eb]/70 p-4">
-            <Image
-              src="/operatorio.png"
-              alt="Cuidado post operatorio"
-              width={500}
-              height={320}
-              className="mb-4 h-44 w-full rounded-lg object-cover"
-            />
-            <Title as="h3" className="mb-2 text-2xl">
-              Post operatorio
-            </Title>
-            <p className="text-[#5f534a]">Acompañamiento de recuperación.</p>
-            <p className="mt-2 font-medium text-[#6e5b4e]">Desde $4,500 MXN</p>
-          </article>
+          {featuredServices.map((service, index) => (
+            <article
+              key={`${service.title ?? "service"}-${index}`}
+              className="rounded-lg bg-[#f8f2eb]/70 p-4"
+            >
+              <Image
+                src={service.imageUrl}
+                alt={service.title ?? "Servicio"}
+                width={500}
+                height={320}
+                className="mb-4 h-44 w-full rounded-lg object-cover"
+              />
+              <Title as="h3" className="mb-2 text-2xl">
+                {service.title ?? "Servicio"}
+              </Title>
+              <p className="text-[#5f534a]">{service.description ?? ""}</p>
+              <p className="mt-2 font-medium text-[#6e5b4e]">
+                {service.price ?? ""}
+              </p>
+            </article>
+          ))}
         </div>
       </section>
 
       <section className="mx-auto mt-14 grid max-w-6xl gap-6 rounded-xl bg-[#f8f2eb]/70 p-6 md:grid-cols-2">
         <div>
           <Title as="h2" className="mb-3">
-            Sobre Oro y Miel Spa
+            {homePage?.about?.title ?? "Sobre Oro y Miel Spa"}
           </Title>
           <p className="text-[#5f534a]">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-            facilisis, arcu et volutpat posuere, purus lacus congue justo, at
-            ultrices sem velit id neque. Curabitur nec sem ac elit varius
-            ultricies.
+            {homePage?.about?.text ??
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer facilisis, arcu et volutpat posuere, purus lacus congue justo, at ultrices sem velit id neque. Curabitur nec sem ac elit varius ultricies."}
           </p>
         </div>
         <Image
-          src="/banner.png"
+          src={homePage?.about?.image?.asset?.url ?? "/banner.png"}
           alt="Detalle spa"
           width={800}
           height={500}
@@ -143,18 +169,17 @@ export default function Home() {
           Lo que dicen nuestras clientas
         </Title>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <blockquote className="rounded-lg bg-[#f8f2eb]/70 p-4 text-[#5f534a]">
-            “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            auctor euismod felis.”
-          </blockquote>
-          <blockquote className="rounded-lg bg-[#f8f2eb]/70 p-4 text-[#5f534a]">
-            “Praesent posuere, justo quis tempus egestas, augue massa maximus
-            magna, ut ultrices erat.”
-          </blockquote>
-          <blockquote className="rounded-lg bg-[#f8f2eb]/70 p-4 text-[#5f534a]">
-            “Aenean consequat purus quis sem pretium, in ultrices nibh faucibus.
-            Integer non velit ut leo.”
-          </blockquote>
+          {homePage?.testimonials?.map((testimonial, index) => (
+            <blockquote
+              key={`testimonial-${testimonial.quote ?? index}`}
+              className="rounded-lg bg-[#f8f2eb]/70 p-4 text-[#5f534a]"
+            >
+              <p>“{testimonial.quote ?? ""}”</p>
+              {testimonial.author ? (
+                <footer className="mt-2 text-sm">- {testimonial.author}</footer>
+              ) : null}
+            </blockquote>
+          ))}
         </div>
       </section>
 
@@ -167,19 +192,21 @@ export default function Home() {
         </p>
         <div className="flex flex-wrap items-center gap-4 text-[#6e5b4e]">
           <a
-            href="tel:+523331795995"
+            href={`tel:${settings?.phone ? settings.phone.replace(/\s+/g, "") : "+523331795995"}`}
             className="underline decoration-[#d5b8a6] underline-offset-4 hover:text-[#5f534a]"
           >
-            3331795995
+            {settings?.phone ?? "3331795995"}
           </a>
           <span aria-hidden="true">•</span>
           <a
-            href="https://www.instagram.com/oromielspa/"
+            href={
+              settings?.instagram ?? "https://www.instagram.com/oromielspa/"
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="underline decoration-[#d5b8a6] underline-offset-4 hover:text-[#5f534a]"
           >
-            @oromielspa
+            {settings?.instagram ? "Instagram" : "@oromielspa"}
           </a>
         </div>
       </section>

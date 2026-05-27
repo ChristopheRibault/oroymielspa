@@ -21,8 +21,51 @@ export type SiteSettings = {
   };
 };
 
+export type HomePageData = {
+  heroTitle?: string;
+  heroText?: string;
+  heroImage?: {
+    alt?: string;
+    asset?: {
+      url?: string;
+    };
+  };
+  primaryCtaLabel?: string;
+  primaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
+  highlights?: string[];
+  featuredServices?: Array<{
+    title?: string;
+    description?: string;
+    price?: string;
+    image?: {
+      asset?: {
+        url?: string;
+      };
+    };
+  }>;
+  about?: {
+    title?: string;
+    text?: string;
+    image?: {
+      asset?: {
+        url?: string;
+      };
+    };
+  };
+  testimonials?: Array<{
+    quote?: string;
+    author?: string;
+  }>;
+};
+
 const siteSettingsQuery = encodeURIComponent(
   '*[_type == "siteSettings"][0]{siteTitle,siteDescription,bookingUrl,phone,instagram,seoTitle,seoDescription,logo{alt,asset->{url}}}',
+);
+
+const homePageQuery = encodeURIComponent(
+  '*[_type == "homePage"][0]{heroTitle,heroText,heroImage{alt,asset->{url}},primaryCtaLabel,primaryCtaHref,secondaryCtaLabel,secondaryCtaHref,highlights,featuredServices[]{title,description,price,image{asset->{url}}},about{title,text,image{asset->{url}}},testimonials[]{quote,author}}',
 );
 
 export async function getSiteSettings() {
@@ -40,6 +83,25 @@ export async function getSiteSettings() {
   }
 
   const payload = (await response.json()) as { result: SiteSettings | null };
+
+  return payload.result;
+}
+
+export async function getHomePage() {
+  const response = await fetch(
+    `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${homePageQuery}`,
+    {
+      next: {
+        revalidate: 60,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as { result: HomePageData | null };
 
   return payload.result;
 }
