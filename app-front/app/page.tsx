@@ -43,9 +43,9 @@ export default function Home() {
         <Image
           src="/salon.png"
           alt="Interior de Oro y Miel Spa"
-          width={900}
-          height={700}
-          className="h-full w-full rounded-xl object-cover"
+          width={300}
+          height={300}
+          className="h-auto max-h-75 w-full rounded-xl object-cover"
           priority
         />
       </section>
