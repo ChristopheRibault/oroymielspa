@@ -8,7 +8,7 @@ export default function Menu() {
       <ul className="flex flex-row flex-wrap sm:flex-col items-start gap-2">
         <MenuItem label="Inicio" href="/" />
         <MenuItem label="Servicios" href="/servicios" />
-        <MenuItem label="Contacto" />
+        <MenuItem label="Contacto" href="/contacto" />
       </ul>
 
       <div className="mt-3 flex items-center gap-2">
