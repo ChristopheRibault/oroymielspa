@@ -45,4 +45,10 @@ app-front/.vercel
 *.tsbuildinfo
 app-front/next-env.d.ts
 
+# sanity studio
+sanity/node_modules/
+sanity/dist/
+sanity/.sanity/
+sanity/.turbo/
+
 images

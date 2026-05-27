@@ -3,6 +3,7 @@ import "./globals.css";
 import { Cormorant_Garamond, Nunito_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
+import { getSiteSettings } from "@/lib/sanity";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -17,16 +18,48 @@ const cormorantGaramond = Cormorant_Garamond({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Oro y Miel Spa",
-  description: "El ritual que tu cuerpo merece",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
 
-export default function RootLayout({
+  if (!settings) {
+    return {};
+  }
+
+  const title = settings.seoTitle ?? settings.siteTitle;
+  const description = settings.seoDescription ?? settings.siteDescription;
+  const imageUrl = settings.logo?.asset?.url;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title: title ?? undefined,
+      description: description ?? undefined,
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              alt: settings.logo?.alt ?? title ?? "Oro y Miel Spa",
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: imageUrl ? "summary_large_image" : "summary",
+      title: title ?? undefined,
+      description: description ?? undefined,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
+
   return (
     <html
       lang="fr"
@@ -37,7 +70,7 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full">
-        <Header />
+        <Header settings={settings} />
         {children}
       </body>
     </html>

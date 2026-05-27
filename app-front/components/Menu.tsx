@@ -2,7 +2,11 @@ import MenuItem from "./MenuItem";
 import Link from "next/link";
 import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 
-export default function Menu() {
+type MenuProps = {
+  instagramHref: string;
+};
+
+export default function Menu({ instagramHref }: MenuProps) {
   return (
     <nav aria-label="Menu principal" className="pt-3 sm:pt-6 font-heading">
       <ul className="flex flex-row flex-wrap sm:flex-col items-start gap-2">
@@ -13,7 +17,7 @@ export default function Menu() {
 
       <div className="mt-3 flex items-center gap-2">
         <Link
-          href="https://www.instagram.com/oromielspa/"
+          href={instagramHref}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Instagram"
