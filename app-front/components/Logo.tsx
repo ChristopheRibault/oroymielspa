@@ -5,7 +5,7 @@ export const Logo = () => {
   return (
     <Link href="/" className="flex items-center gap-2">
       <Image
-        src="/baseline_b89c89.svg"
+        src="/logo_no_bg.png"
         alt="Spa Oro y Miel by Lismar - El ritual que tu cuerpo merece"
         width={360}
         height={288}
