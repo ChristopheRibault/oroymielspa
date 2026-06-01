@@ -72,6 +72,24 @@ export type ContactPageData = {
   mapUrl?: string;
 };
 
+export type ServicePageData = {
+  title?: string;
+  services?: Array<{
+    title?: string;
+    image?: {
+      alt?: string;
+      asset?: {
+        url?: string;
+      };
+    };
+    services?: Array<{
+      name?: string;
+      description?: string;
+      price?: string;
+    }>;
+  }>;
+};
+
 const siteSettingsQuery = encodeURIComponent(
   '*[_type == "siteSettings"][0]{siteTitle,siteDescription,bookingUrl,phone,instagram,seoTitle,seoDescription,logo{alt,asset->{url}}}',
 );
@@ -82,6 +100,10 @@ const homePageQuery = encodeURIComponent(
 
 const contactPageQuery = encodeURIComponent(
   '*[_type == "contactPage"][0]{title,intro,phone,instagram,email,address,openingHours,bookingUrl,mapUrl}',
+);
+
+const servicePageQuery = encodeURIComponent(
+  '*[_type == "servicePage"][0]{title,services[]{title,image{alt,asset->{url}},services[]{name,description,price}}}',
 );
 
 export async function getSiteSettings() {
@@ -137,6 +159,25 @@ export async function getContactPage() {
   }
 
   const payload = (await response.json()) as { result: ContactPageData | null };
+
+  return payload.result;
+}
+
+export async function getServicePage() {
+  const response = await fetch(
+    `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${servicePageQuery}`,
+    {
+      next: {
+        revalidate: 60,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as { result: ServicePageData | null };
 
   return payload.result;
 }

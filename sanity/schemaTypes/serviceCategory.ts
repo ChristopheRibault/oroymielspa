@@ -3,27 +3,12 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 export default defineType({
   name: "serviceCategory",
   title: "Service category",
-  type: "document",
+  type: "object",
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
-    }),
-    defineField({
-      name: "slug",
-      title: "Slug",
-      type: "slug",
-      options: {
-        source: "title",
-        maxLength: 96,
-      },
-    }),
-    defineField({
-      name: "description",
-      title: "Description",
-      type: "text",
-      rows: 3,
     }),
     defineField({
       name: "image",
