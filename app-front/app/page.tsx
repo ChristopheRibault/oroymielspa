@@ -1,9 +1,43 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Title } from "@/components/ui/title";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getHomePage, getSiteSettings } from "@/lib/sanity";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [homePage, settings] = await Promise.all([
+    getHomePage(),
+    getSiteSettings(),
+  ]);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oroymiel.com";
+  const title = settings?.siteTitle ?? "Oro y Miel Spa";
+  const description = homePage?.heroText ?? settings?.siteDescription;
+  const imageUrl =
+    homePage?.heroImage?.asset?.url ?? settings?.logo?.asset?.url;
+
+  return {
+    title,
+    description: description ?? undefined,
+    alternates: {
+      canonical: `${siteUrl}/`,
+    },
+    openGraph: {
+      title,
+      description: description ?? undefined,
+      url: `${siteUrl}/`,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
+    },
+    twitter: {
+      card: imageUrl ? "summary_large_image" : "summary",
+      title,
+      description: description ?? undefined,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
+}
 
 export default async function Home() {
   const [homePage, settings] = await Promise.all([

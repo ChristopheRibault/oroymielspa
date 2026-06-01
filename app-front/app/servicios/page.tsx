@@ -1,7 +1,42 @@
+import type { Metadata } from "next";
 import { Service } from "@/components/Services/Service";
 import { ServicesList } from "@/components/Services/ServicesList";
 import { Title } from "@/components/ui/title";
-import { getServicePage } from "@/lib/sanity";
+import { getServicePage, getSiteSettings } from "@/lib/sanity";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [servicePage, settings] = await Promise.all([
+    getServicePage(),
+    getSiteSettings(),
+  ]);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oroymiel.com";
+  const pageTitle = servicePage?.title ?? "Servicios";
+  const siteTitle = settings?.siteTitle ?? "Oro y Miel Spa";
+  const title = `${pageTitle} | ${siteTitle}`;
+  const description = settings?.siteDescription;
+  const imageUrl = settings?.logo?.asset?.url;
+
+  return {
+    title,
+    description: description ?? undefined,
+    alternates: {
+      canonical: `${siteUrl}/servicios`,
+    },
+    openGraph: {
+      title,
+      description: description ?? undefined,
+      url: `${siteUrl}/servicios`,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
+    },
+    twitter: {
+      card: imageUrl ? "summary_large_image" : "summary",
+      title,
+      description: description ?? undefined,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
+}
 
 export default async function Servicios() {
   const servicePage = await getServicePage();

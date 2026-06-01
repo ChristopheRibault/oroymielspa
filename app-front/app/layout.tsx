@@ -60,10 +60,27 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const settings = await getSiteSettings();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oroymiel.com";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Spa",
+    name: settings?.siteTitle ?? "Oro y Miel Spa",
+    description: settings?.siteDescription,
+    url: siteUrl,
+    telephone: settings?.phone,
+    email: settings?.email,
+    address: settings?.address,
+    openingHours: settings?.openingHours,
+    image: settings?.logo?.asset?.url,
+    sameAs: [
+      settings?.socialMedia?.instagram?.url,
+      settings?.socialMedia?.facebook?.url,
+    ].filter(Boolean),
+  };
 
   return (
     <html
-      lang="es"
+      lang="es-MX"
       className={cn(
         "h-full antialiased font-sans",
         nunitoSans.variable,
@@ -71,6 +88,10 @@ export default async function RootLayout({
       )}
     >
       <body className="flex min-h-screen flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Header settings={settings} />
         <div className="flex-1">{children}</div>
         <Footer settings={settings} />

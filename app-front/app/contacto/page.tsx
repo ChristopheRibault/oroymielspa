@@ -1,7 +1,42 @@
+import type { Metadata } from "next";
 import { Title } from "@/components/ui/title";
 import Image from "next/image";
 import { FaFacebookF, FaHouse, FaInstagram, FaPhone } from "react-icons/fa6";
 import { getContactPage, getSiteSettings } from "@/lib/sanity";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [contactPage, settings] = await Promise.all([
+    getContactPage(),
+    getSiteSettings(),
+  ]);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oroymiel.com";
+  const pageTitle = contactPage?.title ?? "Contacto";
+  const siteTitle = settings?.siteTitle ?? "Oro y Miel Spa";
+  const title = `${pageTitle} | ${siteTitle}`;
+  const description = contactPage?.intro ?? settings?.siteDescription;
+  const imageUrl = settings?.logo?.asset?.url;
+
+  return {
+    title,
+    description: description ?? undefined,
+    alternates: {
+      canonical: `${siteUrl}/contacto`,
+    },
+    openGraph: {
+      title,
+      description: description ?? undefined,
+      url: `${siteUrl}/contacto`,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
+    },
+    twitter: {
+      card: imageUrl ? "summary_large_image" : "summary",
+      title,
+      description: description ?? undefined,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  };
+}
 
 export default async function Contacto() {
   const [contactPage, settings] = await Promise.all([
