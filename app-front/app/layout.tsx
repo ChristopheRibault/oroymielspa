@@ -4,7 +4,7 @@ import { Cormorant_Garamond, Nunito_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getContactPage, getSiteSettings } from "@/lib/sanity";
+import { getSiteSettings } from "@/lib/sanity";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -26,8 +26,8 @@ export async function generateMetadata(): Promise<Metadata> {
     return {};
   }
 
-  const title = settings.seoTitle ?? settings.siteTitle;
-  const description = settings.seoDescription ?? settings.siteDescription;
+  const title = settings.siteTitle;
+  const description = settings.siteDescription;
   const imageUrl = settings.logo?.asset?.url;
 
   return {
@@ -59,10 +59,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, contactPage] = await Promise.all([
-    getSiteSettings(),
-    getContactPage(),
-  ]);
+  const settings = await getSiteSettings();
 
   return (
     <html
@@ -76,7 +73,7 @@ export default async function RootLayout({
       <body className="flex min-h-screen flex-col">
         <Header settings={settings} />
         <div className="flex-1">{children}</div>
-        <Footer settings={settings} contactPage={contactPage} />
+        <Footer settings={settings} />
       </body>
     </html>
   );

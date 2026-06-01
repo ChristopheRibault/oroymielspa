@@ -30,9 +30,45 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "bookingUrl",
-      title: "Booking URL",
-      type: "url",
+      name: "socialMedia",
+      title: "Social media",
+      type: "object",
+      fields: [
+        defineField({
+          name: "instagram",
+          title: "Instagram",
+          type: "object",
+          fields: [
+            defineField({
+              name: "label",
+              title: "Label",
+              type: "string",
+            }),
+            defineField({
+              name: "url",
+              title: "URL",
+              type: "url",
+            }),
+          ],
+        }),
+        defineField({
+          name: "facebook",
+          title: "Facebook",
+          type: "object",
+          fields: [
+            defineField({
+              name: "label",
+              title: "Label",
+              type: "string",
+            }),
+            defineField({
+              name: "url",
+              title: "URL",
+              type: "url",
+            }),
+          ],
+        }),
+      ],
     }),
     defineField({
       name: "phone",
@@ -40,18 +76,19 @@ export default defineType({
       type: "string",
     }),
     defineField({
-      name: "instagram",
-      title: "Instagram",
-      type: "url",
-    }),
-    defineField({
-      name: "seoTitle",
-      title: "SEO title",
+      name: "email",
+      title: "Email",
       type: "string",
     }),
     defineField({
-      name: "seoDescription",
-      title: "SEO description",
+      name: "address",
+      title: "Address",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
+      name: "openingHours",
+      title: "Opening hours",
       type: "text",
       rows: 3,
     }),

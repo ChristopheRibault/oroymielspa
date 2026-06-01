@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 const projectId =
   process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ??
   process.env.SANITY_PROJECT_ID ??
@@ -8,11 +10,21 @@ const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2025-01-01";
 export type SiteSettings = {
   siteTitle?: string;
   siteDescription?: string;
+  address?: string;
+  openingHours?: string;
   bookingUrl?: string;
   phone?: string;
-  instagram?: string;
-  seoTitle?: string;
-  seoDescription?: string;
+  email?: string;
+  socialMedia?: {
+    instagram?: {
+      label?: string;
+      url?: string;
+    };
+    facebook?: {
+      label?: string;
+      url?: string;
+    };
+  };
   logo?: {
     alt?: string;
     asset?: {
@@ -63,13 +75,6 @@ export type HomePageData = {
 export type ContactPageData = {
   title?: string;
   intro?: string;
-  phone?: string;
-  instagram?: string;
-  email?: string;
-  address?: string;
-  openingHours?: string;
-  bookingUrl?: string;
-  mapUrl?: string;
 };
 
 export type ServicePageData = {
@@ -91,7 +96,7 @@ export type ServicePageData = {
 };
 
 const siteSettingsQuery = encodeURIComponent(
-  '*[_type == "siteSettings"][0]{siteTitle,siteDescription,bookingUrl,phone,instagram,seoTitle,seoDescription,logo{alt,asset->{url}}}',
+  '*[_type == "siteSettings"][0]{siteTitle,siteDescription,address,openingHours,bookingUrl,phone,email,instagram,seoTitle,seoDescription,socialMedia{instagram{label,url},facebook{label,url}},logo{alt,asset->{url}}}',
 );
 
 const homePageQuery = encodeURIComponent(
@@ -99,14 +104,14 @@ const homePageQuery = encodeURIComponent(
 );
 
 const contactPageQuery = encodeURIComponent(
-  '*[_type == "contactPage"][0]{title,intro,phone,instagram,email,address,openingHours,bookingUrl,mapUrl}',
+  '*[_type == "contactPage"][0]{title,intro}',
 );
 
 const servicePageQuery = encodeURIComponent(
   '*[_type == "servicePage"][0]{title,services[]{title,image{alt,asset->{url}},services[]{name,description,price}}}',
 );
 
-export async function getSiteSettings() {
+export const getSiteSettings = cache(async function getSiteSettings() {
   const response = await fetch(
     `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${siteSettingsQuery}`,
     {
@@ -123,9 +128,9 @@ export async function getSiteSettings() {
   const payload = (await response.json()) as { result: SiteSettings | null };
 
   return payload.result;
-}
+});
 
-export async function getHomePage() {
+export const getHomePage = cache(async function getHomePage() {
   const response = await fetch(
     `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${homePageQuery}`,
     {
@@ -142,9 +147,9 @@ export async function getHomePage() {
   const payload = (await response.json()) as { result: HomePageData | null };
 
   return payload.result;
-}
+});
 
-export async function getContactPage() {
+export const getContactPage = cache(async function getContactPage() {
   const response = await fetch(
     `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${contactPageQuery}`,
     {
@@ -161,9 +166,9 @@ export async function getContactPage() {
   const payload = (await response.json()) as { result: ContactPageData | null };
 
   return payload.result;
-}
+});
 
-export async function getServicePage() {
+export const getServicePage = cache(async function getServicePage() {
   const response = await fetch(
     `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${servicePageQuery}`,
     {
@@ -180,4 +185,4 @@ export async function getServicePage() {
   const payload = (await response.json()) as { result: ServicePageData | null };
 
   return payload.result;
-}
+});

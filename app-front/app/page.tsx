@@ -5,33 +5,6 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getHomePage, getSiteSettings } from "@/lib/sanity";
 
-const defaultHighlights = [
-  "Atención personalizada",
-  "Productos profesionales",
-  "Ambiente relajante",
-];
-
-const defaultFeaturedServices = [
-  {
-    title: "Faciales",
-    description: "Rituales de limpieza e hidratación.",
-    price: "Desde $450 MXN",
-    imageUrl: "/faciales.png",
-  },
-  {
-    title: "Rituales relajantes",
-    description: "Masajes para cuerpo y mente.",
-    price: "Desde $350 MXN",
-    imageUrl: "/rituales.png",
-  },
-  {
-    title: "Post operatorio",
-    description: "Acompañamiento de recuperación.",
-    price: "Desde $4,500 MXN",
-    imageUrl: "/operatorio.png",
-  },
-];
-
 export default async function Home() {
   const [homePage, settings] = await Promise.all([
     getHomePage(),
@@ -41,20 +14,17 @@ export default async function Home() {
   const highlights =
     homePage?.highlights && homePage.highlights.length > 0
       ? homePage.highlights
-      : defaultHighlights;
+      : [];
 
   const featuredServices =
     homePage?.featuredServices && homePage.featuredServices.length > 0
-      ? homePage.featuredServices.map((service, index) => ({
+      ? homePage.featuredServices.map((service) => ({
           title: service.title,
           description: service.description,
           price: service.price,
-          imageUrl:
-            service.image?.asset?.url ??
-            defaultFeaturedServices[index]?.imageUrl ??
-            "/salon.png",
+          imageUrl: service.image?.asset?.url ?? "/salon.png",
         }))
-      : defaultFeaturedServices;
+      : [];
 
   const primaryCtaHref =
     homePage?.primaryCtaHref ?? settings?.bookingUrl ?? "/contacto";
@@ -199,14 +169,12 @@ export default async function Home() {
           </a>
           <span aria-hidden="true">•</span>
           <a
-            href={
-              settings?.instagram ?? "https://www.instagram.com/oromielspa/"
-            }
+            href={settings?.socialMedia?.instagram?.url}
             target="_blank"
             rel="noopener noreferrer"
             className="underline decoration-[#d5b8a6] underline-offset-4 hover:text-[#5f534a]"
           >
-            {settings?.instagram ? "Instagram" : "@oromielspa"}
+            {settings?.socialMedia?.instagram?.label ?? "Instagram"}
           </a>
         </div>
       </section>
