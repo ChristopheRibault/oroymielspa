@@ -60,12 +60,28 @@ export type HomePageData = {
   }>;
 };
 
+export type ContactPageData = {
+  title?: string;
+  intro?: string;
+  phone?: string;
+  instagram?: string;
+  email?: string;
+  address?: string;
+  openingHours?: string;
+  bookingUrl?: string;
+  mapUrl?: string;
+};
+
 const siteSettingsQuery = encodeURIComponent(
   '*[_type == "siteSettings"][0]{siteTitle,siteDescription,bookingUrl,phone,instagram,seoTitle,seoDescription,logo{alt,asset->{url}}}',
 );
 
 const homePageQuery = encodeURIComponent(
   '*[_type == "homePage"][0]{heroTitle,heroText,heroImage{alt,asset->{url}},primaryCtaLabel,primaryCtaHref,secondaryCtaLabel,secondaryCtaHref,highlights,featuredServices[]{title,description,price,image{asset->{url}}},about{title,text,image{asset->{url}}},testimonials[]{quote,author}}',
+);
+
+const contactPageQuery = encodeURIComponent(
+  '*[_type == "contactPage"][0]{title,intro,phone,instagram,email,address,openingHours,bookingUrl,mapUrl}',
 );
 
 export async function getSiteSettings() {
@@ -102,6 +118,25 @@ export async function getHomePage() {
   }
 
   const payload = (await response.json()) as { result: HomePageData | null };
+
+  return payload.result;
+}
+
+export async function getContactPage() {
+  const response = await fetch(
+    `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=${contactPageQuery}`,
+    {
+      next: {
+        revalidate: 60,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = (await response.json()) as { result: ContactPageData | null };
 
   return payload.result;
 }
