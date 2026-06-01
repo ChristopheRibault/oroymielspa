@@ -26,9 +26,12 @@ export default async function Home() {
         }))
       : [];
 
-  const primaryCtaHref =
-    homePage?.primaryCtaHref ?? settings?.bookingUrl ?? "/contacto";
-  const secondaryCtaHref = homePage?.secondaryCtaHref ?? "/servicios";
+  const ctas =
+    homePage?.ctas
+      ?.filter((cta): cta is { label?: string; href: string } =>
+        Boolean(cta?.href),
+      )
+      .slice(0, 2) ?? [];
 
   return (
     <main className="min-h-screen px-6 py-10 sm:px-10">
@@ -43,24 +46,22 @@ export default async function Home() {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              href={primaryCtaHref}
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "h-auto border-[0.8px] border-[#6e5b4e]/70 bg-transparent px-4 py-2 font-heading text-[1.18rem] leading-none text-[#6e5b4e] hover:bg-[#e8ded2]",
-              )}
-            >
-              {homePage?.primaryCtaLabel ?? "Reservar cita"}
-            </Link>
-            <Link
-              href={secondaryCtaHref}
-              className={cn(
-                buttonVariants({ variant: "ghost" }),
-                "h-auto px-4 py-2 font-heading text-[1.18rem] leading-none text-[#6e5b4e] hover:bg-[#e8ded2]",
-              )}
-            >
-              {homePage?.secondaryCtaLabel ?? "Ver servicios"}
-            </Link>
+            {ctas.map((cta, index) => (
+              <Link
+                key={`${cta.href}-${index}`}
+                href={cta.href}
+                className={cn(
+                  buttonVariants({
+                    variant: index === 0 ? "outline" : "ghost",
+                  }),
+                  index === 0
+                    ? "h-auto border-[0.8px] border-[#6e5b4e]/70 bg-transparent px-4 py-2 font-heading text-[1.18rem] leading-none text-[#6e5b4e] hover:bg-[#e8ded2]"
+                    : "h-auto px-4 py-2 font-heading text-[1.18rem] leading-none text-[#6e5b4e] hover:bg-[#e8ded2]",
+                )}
+              >
+                {cta.label ?? (index === 0 ? "Reservar cita" : "Ver servicios")}
+              </Link>
+            ))}
           </div>
         </div>
 

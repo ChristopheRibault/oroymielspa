@@ -42,10 +42,10 @@ export type HomePageData = {
       url?: string;
     };
   };
-  primaryCtaLabel?: string;
-  primaryCtaHref?: string;
-  secondaryCtaLabel?: string;
-  secondaryCtaHref?: string;
+  ctas?: Array<{
+    label?: string;
+    href?: string;
+  }>;
   highlights?: string[];
   featuredServices?: Array<{
     title?: string;
@@ -100,7 +100,7 @@ const siteSettingsQuery = encodeURIComponent(
 );
 
 const homePageQuery = encodeURIComponent(
-  '*[_type == "homePage"][0]{heroTitle,heroText,heroImage{alt,asset->{url}},primaryCtaLabel,primaryCtaHref,secondaryCtaLabel,secondaryCtaHref,highlights,featuredServices[]{title,description,price,image{asset->{url}}},about{title,text,image{asset->{url}}},testimonials[]{quote,author}}',
+  '*[_type == "homePage"][0]{heroTitle,heroText,heroImage{alt,asset->{url}},ctas[]{label,"href":select(href->_type == "homePage" => "/",href->_type == "servicePage" => "/servicios",href->_type == "contactPage" => "/contacto",null)},highlights,featuredServices[]{title,description,price,image{asset->{url}}},about{title,text,image{asset->{url}}},testimonials[]{quote,author}}',
 );
 
 const contactPageQuery = encodeURIComponent(

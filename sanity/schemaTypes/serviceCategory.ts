@@ -2,43 +2,43 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 
 export default defineType({
   name: "serviceCategory",
-  title: "Service category",
+  title: "Categoría de servicios",
   type: "object",
   fields: [
     defineField({
       name: "title",
-      title: "Title",
+      title: "Título",
       type: "string",
     }),
     defineField({
       name: "image",
-      title: "Image",
+      title: "Imagen",
       type: "image",
       options: { hotspot: true },
       fields: [
         defineField({
           name: "alt",
-          title: "Alt text",
+          title: "Texto alternativo",
           type: "string",
         }),
       ],
     }),
     defineField({
       name: "services",
-      title: "Services",
+      title: "Servicios",
       type: "array",
       of: [
         defineArrayMember({
           type: "object",
           fields: [
-            defineField({ name: "name", title: "Name", type: "string" }),
+            defineField({ name: "name", title: "Nombre", type: "string" }),
             defineField({
               name: "description",
-              title: "Description",
+              title: "Descripción",
               type: "text",
               rows: 3,
             }),
-            defineField({ name: "price", title: "Price", type: "string" }),
+            defineField({ name: "price", title: "Precio", type: "string" }),
           ],
         }),
       ],

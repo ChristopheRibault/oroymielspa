@@ -63,7 +63,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="fr"
+      lang="es"
       className={cn(
         "h-full antialiased font-sans",
         nunitoSans.variable,

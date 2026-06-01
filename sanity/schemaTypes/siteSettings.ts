@@ -2,17 +2,17 @@ import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "siteSettings",
-  title: "Site settings",
+  title: "Configuración del sitio",
   type: "document",
   fields: [
     defineField({
       name: "siteTitle",
-      title: "Site title",
+      title: "Título del sitio",
       type: "string",
     }),
     defineField({
       name: "siteDescription",
-      title: "Site description",
+      title: "Descripción del sitio",
       type: "text",
       rows: 3,
     }),
@@ -24,14 +24,14 @@ export default defineType({
       fields: [
         defineField({
           name: "alt",
-          title: "Alt text",
+          title: "Texto alternativo",
           type: "string",
         }),
       ],
     }),
     defineField({
       name: "socialMedia",
-      title: "Social media",
+      title: "Redes sociales",
       type: "object",
       fields: [
         defineField({
@@ -41,7 +41,7 @@ export default defineType({
           fields: [
             defineField({
               name: "label",
-              title: "Label",
+              title: "Etiqueta",
               type: "string",
             }),
             defineField({
@@ -58,7 +58,7 @@ export default defineType({
           fields: [
             defineField({
               name: "label",
-              title: "Label",
+              title: "Etiqueta",
               type: "string",
             }),
             defineField({
@@ -72,23 +72,23 @@ export default defineType({
     }),
     defineField({
       name: "phone",
-      title: "Phone",
+      title: "Teléfono",
       type: "string",
     }),
     defineField({
       name: "email",
-      title: "Email",
+      title: "Correo electrónico",
       type: "string",
     }),
     defineField({
       name: "address",
-      title: "Address",
+      title: "Dirección",
       type: "text",
       rows: 3,
     }),
     defineField({
       name: "openingHours",
-      title: "Opening hours",
+      title: "Horario de apertura",
       type: "text",
       rows: 3,
     }),

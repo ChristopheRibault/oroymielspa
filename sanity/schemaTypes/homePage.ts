@@ -2,73 +2,87 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 
 export default defineType({
   name: "homePage",
-  title: "Home page",
+  title: "Página de inicio",
   type: "document",
   fields: [
     defineField({
       name: "heroTitle",
-      title: "Hero title",
+      title: "Título principal",
       type: "string",
     }),
     defineField({
       name: "heroText",
-      title: "Hero text",
+      title: "Texto principal",
       type: "text",
       rows: 4,
     }),
     defineField({
       name: "heroImage",
-      title: "Hero image",
+      title: "Imagen principal",
       type: "image",
       options: { hotspot: true },
       fields: [
         defineField({
           name: "alt",
-          title: "Alt text",
+          title: "Texto alternativo",
           type: "string",
         }),
       ],
     }),
     defineField({
-      name: "primaryCtaLabel",
-      title: "Primary CTA label",
-      type: "string",
-    }),
-    defineField({
-      name: "primaryCtaHref",
-      title: "Primary CTA link",
-      type: "url",
-    }),
-    defineField({
-      name: "secondaryCtaLabel",
-      title: "Secondary CTA label",
-      type: "string",
-    }),
-    defineField({
-      name: "secondaryCtaHref",
-      title: "Secondary CTA link",
-      type: "url",
-    }),
-    defineField({
-      name: "highlights",
-      title: "Highlights",
-      type: "array",
-      of: [defineArrayMember({ type: "string" })],
-    }),
-    defineField({
-      name: "featuredServices",
-      title: "Featured services",
+      name: "ctas",
+      title: "Llamados a la acción",
       type: "array",
       of: [
         defineArrayMember({
           type: "object",
           fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
-            defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
-            defineField({ name: "price", title: "Price", type: "string" }),
+            defineField({
+              name: "label",
+              title: "Etiqueta",
+              type: "string",
+            }),
+            defineField({
+              name: "href",
+              title: "Página",
+              type: "reference",
+              to: [
+                { type: "homePage" },
+                { type: "servicePage" },
+                { type: "contactPage" },
+              ],
+            }),
+          ],
+        }),
+      ],
+      validation: (Rule) => Rule.max(2).error("Máximo 2 llamados a la acción"),
+    }),
+    defineField({
+      name: "highlights",
+      title: "Destacados",
+      type: "array",
+      of: [defineArrayMember({ type: "string" })],
+      validation: (Rule) => Rule.max(3).error("Máximo 3 destacados"),
+    }),
+    defineField({
+      name: "featuredServices",
+      title: "Servicios destacados",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Título", type: "string" }),
+            defineField({
+              name: "description",
+              title: "Descripción",
+              type: "text",
+              rows: 3,
+            }),
+            defineField({ name: "price", title: "Precio", type: "string" }),
             defineField({
               name: "image",
-              title: "Image",
+              title: "Imagen",
               type: "image",
               options: { hotspot: true },
             }),
@@ -78,14 +92,14 @@ export default defineType({
     }),
     defineField({
       name: "about",
-      title: "About section",
+      title: "Sección Acerca de",
       type: "object",
       fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "text", title: "Text", type: "text", rows: 4 }),
+        defineField({ name: "title", title: "Título", type: "string" }),
+        defineField({ name: "text", title: "Texto", type: "text", rows: 4 }),
         defineField({
           name: "image",
-          title: "Image",
+          title: "Imagen",
           type: "image",
           options: { hotspot: true },
         }),
@@ -93,14 +107,19 @@ export default defineType({
     }),
     defineField({
       name: "testimonials",
-      title: "Testimonials",
+      title: "Testimonios",
       type: "array",
       of: [
         defineArrayMember({
           type: "object",
           fields: [
-            defineField({ name: "quote", title: "Quote", type: "text", rows: 4 }),
-            defineField({ name: "author", title: "Author", type: "string" }),
+            defineField({
+              name: "quote",
+              title: "Cita",
+              type: "text",
+              rows: 4,
+            }),
+            defineField({ name: "author", title: "Autor", type: "string" }),
           ],
         }),
       ],
