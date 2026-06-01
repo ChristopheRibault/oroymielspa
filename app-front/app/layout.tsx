@@ -3,7 +3,8 @@ import "./globals.css";
 import { Cormorant_Garamond, Nunito_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
-import { getSiteSettings } from "@/lib/sanity";
+import Footer from "@/components/Footer";
+import { getContactPage, getSiteSettings } from "@/lib/sanity";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -58,7 +59,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const settings = await getSiteSettings();
+  const [settings, contactPage] = await Promise.all([
+    getSiteSettings(),
+    getContactPage(),
+  ]);
 
   return (
     <html
@@ -69,9 +73,10 @@ export default async function RootLayout({
         cormorantGaramond.variable,
       )}
     >
-      <body className="min-h-full">
+      <body className="flex min-h-screen flex-col">
         <Header settings={settings} />
-        {children}
+        <div className="flex-1">{children}</div>
+        <Footer settings={settings} contactPage={contactPage} />
       </body>
     </html>
   );
