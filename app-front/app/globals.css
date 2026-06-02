@@ -126,6 +126,16 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+  a[href]:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #3f352e;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgb(63 53 46 / 0.5);
+    border-radius: 0.25rem;
+  }
   body {
     @apply bg-background text-foreground;
   }
