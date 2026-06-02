@@ -74,7 +74,19 @@ export type HomePageData = {
 
 export type ContactPageData = {
   title?: string;
-  intro?: string;
+  intro?: PortableTextBlock[];
+};
+
+export type PortableTextSpan = {
+  _type: "span";
+  text?: string;
+};
+
+export type PortableTextBlock = {
+  _type: "block";
+  _key?: string;
+  style?: string;
+  children?: PortableTextSpan[];
 };
 
 export type ServicePageData = {

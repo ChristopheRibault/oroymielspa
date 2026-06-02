@@ -1,8 +1,30 @@
 import type { Metadata } from "next";
+import RichText from "@/components/RichText";
 import { Title } from "@/components/ui/title";
 import Image from "next/image";
 import { FaFacebookF, FaHouse, FaInstagram, FaPhone } from "react-icons/fa6";
-import { getContactPage, getSiteSettings } from "@/lib/sanity";
+import {
+  getContactPage,
+  getSiteSettings,
+  type PortableTextBlock,
+} from "@/lib/sanity";
+
+function portableTextToPlainText(blocks?: PortableTextBlock[]): string {
+  if (!blocks?.length) {
+    return "";
+  }
+
+  return blocks
+    .filter((block) => block._type === "block")
+    .map((block) =>
+      (block.children ?? [])
+        .filter((child) => child._type === "span")
+        .map((child) => child.text ?? "")
+        .join(""),
+    )
+    .join(" ")
+    .trim();
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const [contactPage, settings] = await Promise.all([
@@ -14,7 +36,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const pageTitle = contactPage?.title ?? "Contacto";
   const siteTitle = settings?.siteTitle ?? "Oro y Miel Spa";
   const title = `${pageTitle} | ${siteTitle}`;
-  const description = contactPage?.intro ?? settings?.siteDescription;
+  const introText = portableTextToPlainText(contactPage?.intro);
+  const description = introText || settings?.siteDescription;
   const imageUrl = settings?.logo?.asset?.url;
 
   return {
@@ -59,12 +82,10 @@ export default async function Contacto() {
 
       <section className="flex flex-col sm:flex-row gap-2 ">
         <dl className="space-y-6 text-[#5f534a] w-full sm:w-1/2 rounded-lg bg-[#f8f2eb]/70 p-5 sm:p-6">
-          <Title as="h2" className="mt-1 text-base sm:text-lg">
-            {contactPage?.intro ? (
-              <span className="whitespace-pre-line">{contactPage.intro}</span>
-            ) : null}
-          </Title>
-
+          <RichText
+            value={contactPage?.intro}
+            className="text-base sm:text-lg"
+          />
           {settings?.address ? (
             <div className="flex flex-row flex-nowrap items-start gap-4">
               <dt className="font-heading flex items-center gap-2 text-2xl text-[#6e5b4e]">

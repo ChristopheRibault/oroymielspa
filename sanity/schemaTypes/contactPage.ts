@@ -13,8 +13,27 @@ export default defineType({
     defineField({
       name: "intro",
       title: "Introducción",
-      type: "text",
-      rows: 4,
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "Título", value: "h2" },
+            { title: "Subtítulo", value: "h3" },
+          ],
+          lists: [
+            { title: "Viñetas", value: "bullet" },
+            { title: "Numerada", value: "number" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Negrita", value: "strong" },
+              { title: "Cursiva", value: "em" },
+            ],
+            annotations: [],
+          },
+        },
+      ],
     }),
   ],
 });
