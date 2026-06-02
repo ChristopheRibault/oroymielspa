@@ -9,12 +9,16 @@ export default defineType({
       name: "siteTitle",
       title: "Título del sitio",
       type: "string",
+      validation: (Rule) =>
+        Rule.required().error("El título del sitio es obligatorio"),
     }),
     defineField({
       name: "siteDescription",
       title: "Descripción del sitio",
       type: "text",
       rows: 3,
+      validation: (Rule) =>
+        Rule.required().error("La descripción del sitio es obligatoria"),
     }),
     defineField({
       name: "logo",
@@ -28,6 +32,7 @@ export default defineType({
           type: "string",
         }),
       ],
+      validation: (Rule) => Rule.required().error("El logo es obligatorio"),
     }),
     defineField({
       name: "socialMedia",
@@ -48,6 +53,12 @@ export default defineType({
               name: "url",
               title: "URL",
               type: "url",
+              validation: (Rule) =>
+                Rule.required()
+                  .uri({
+                    scheme: ["http", "https"],
+                  })
+                  .error("La URL debe ser válida y es obligatoria"),
             }),
           ],
         }),
@@ -65,6 +76,12 @@ export default defineType({
               name: "url",
               title: "URL",
               type: "url",
+              validation: (Rule) =>
+                Rule.required()
+                  .uri({
+                    scheme: ["http", "https"],
+                  })
+                  .error("La URL debe ser válida y es obligatoria"),
             }),
           ],
         }),
@@ -74,11 +91,15 @@ export default defineType({
       name: "phone",
       title: "Teléfono",
       type: "string",
+      validation: (Rule) =>
+        Rule.regex(/^\+?[0-9\s\-()]+$/, "El número de teléfono no es válido"),
     }),
     defineField({
       name: "email",
       title: "Correo electrónico",
       type: "string",
+      validation: (Rule) =>
+        Rule.email().error("El correo electrónico no es válido"),
     }),
     defineField({
       name: "address",

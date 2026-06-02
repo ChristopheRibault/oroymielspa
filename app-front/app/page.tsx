@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import RichText from "@/components/RichText";
 import Image from "next/image";
 import Link from "next/link";
 import { Title } from "@/components/ui/title";
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oroymiel.com";
   const title = settings?.siteTitle ?? "Oro y Miel Spa";
-  const description = homePage?.heroText ?? settings?.siteDescription;
+  const description = settings?.siteDescription;
   const imageUrl =
     homePage?.heroImage?.asset?.url ?? settings?.logo?.asset?.url;
 
@@ -74,10 +75,9 @@ export default async function Home() {
           <Title as="h1" className="mb-4">
             {homePage?.heroTitle ?? "El ritual que tu cuerpo merece"}
           </Title>
-          <p className="max-w-xl text-lg leading-relaxed text-[#5f534a]">
-            {homePage?.heroText ??
-              "En Oro y Miel Spa te ofrecemos tratamientos personalizados para ayudarte a relajarte, recuperar tu bienestar y sentirte mejor cada día."}
-          </p>
+          {homePage?.heroText?.length ? (
+            <RichText value={homePage.heroText} className="max-w-xl text-lg" />
+          ) : null}
 
           <div className="mt-6 flex flex-wrap gap-3">
             {ctas.map((cta, index) => (
@@ -155,14 +155,13 @@ export default async function Home() {
           <Title as="h2" className="mb-3">
             {homePage?.about?.title ?? "Sobre Oro y Miel Spa"}
           </Title>
-          <p className="text-[#5f534a]">
-            {homePage?.about?.text ??
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer facilisis, arcu et volutpat posuere, purus lacus congue justo, at ultrices sem velit id neque. Curabitur nec sem ac elit varius ultricies."}
-          </p>
+          {homePage?.about?.text?.length ? (
+            <RichText value={homePage.about.text} />
+          ) : null}
         </div>
         <Image
           src={homePage?.about?.image?.asset?.url ?? "/banner.png"}
-          alt="Detalle spa"
+          alt=""
           width={800}
           height={500}
           className="h-64 w-full rounded-lg object-cover"

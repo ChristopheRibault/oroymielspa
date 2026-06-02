@@ -35,7 +35,7 @@ export type SiteSettings = {
 
 export type HomePageData = {
   heroTitle?: string;
-  heroText?: string;
+  heroText?: PortableTextBlock[];
   heroImage?: {
     alt?: string;
     asset?: {
@@ -59,7 +59,7 @@ export type HomePageData = {
   }>;
   about?: {
     title?: string;
-    text?: string;
+    text?: PortableTextBlock[];
     image?: {
       asset?: {
         url?: string;

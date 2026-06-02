@@ -9,6 +9,8 @@ export default defineType({
       name: "title",
       title: "Título",
       type: "string",
+      validation: (Rule) =>
+        Rule.required().error("El título de la categoría es obligatorio"),
     }),
     defineField({
       name: "image",
@@ -31,12 +33,22 @@ export default defineType({
         defineArrayMember({
           type: "object",
           fields: [
-            defineField({ name: "name", title: "Nombre", type: "string" }),
+            defineField({
+              name: "name",
+              title: "Nombre",
+              type: "string",
+              validation: (Rule) =>
+                Rule.required().error("El nombre del servicio es obligatorio"),
+            }),
             defineField({
               name: "description",
               title: "Descripción",
               type: "text",
               rows: 3,
+              validation: (Rule) =>
+                Rule.required().error(
+                  "La descripción del servicio es obligatoria",
+                ),
             }),
             defineField({ name: "price", title: "Precio", type: "string" }),
           ],

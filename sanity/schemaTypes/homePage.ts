@@ -9,12 +9,35 @@ export default defineType({
       name: "heroTitle",
       title: "Título principal",
       type: "string",
+      validation: (Rule) =>
+        Rule.required().error("El título principal es obligatorio"),
     }),
     defineField({
       name: "heroText",
       title: "Texto principal",
-      type: "text",
-      rows: 4,
+      type: "array",
+      of: [
+        {
+          type: "block",
+          styles: [
+            { title: "H2", value: "h2" },
+            { title: "H3", value: "h3" },
+          ],
+          lists: [
+            { title: "Viñetas", value: "bullet" },
+            { title: "Numerada", value: "number" },
+          ],
+          marks: {
+            decorators: [
+              { title: "Negrita", value: "strong" },
+              { title: "Cursiva", value: "em" },
+            ],
+            annotations: [],
+          },
+        },
+      ],
+      validation: (Rule) =>
+        Rule.required().error("El texto principal es obligatorio"),
     }),
     defineField({
       name: "heroImage",
@@ -95,8 +118,37 @@ export default defineType({
       title: "Sección Acerca de",
       type: "object",
       fields: [
-        defineField({ name: "title", title: "Título", type: "string" }),
-        defineField({ name: "text", title: "Texto", type: "text", rows: 4 }),
+        defineField({
+          name: "title",
+          title: "Título",
+          type: "string",
+          validation: (Rule) =>
+            Rule.required().error("El título es obligatorio"),
+        }),
+        defineField({
+          name: "text",
+          title: "Texto",
+          type: "array",
+          of: [
+            {
+              type: "block",
+              styles: [],
+              lists: [
+                { title: "Viñetas", value: "bullet" },
+                { title: "Numerada", value: "number" },
+              ],
+              marks: {
+                decorators: [
+                  { title: "Negrita", value: "strong" },
+                  { title: "Cursiva", value: "em" },
+                ],
+                annotations: [],
+              },
+            },
+          ],
+          validation: (Rule) =>
+            Rule.required().error("El texto es obligatorio"),
+        }),
         defineField({
           name: "image",
           title: "Imagen",
@@ -118,11 +170,14 @@ export default defineType({
               title: "Cita",
               type: "text",
               rows: 4,
+              validation: (Rule) =>
+                Rule.required().error("La cita es obligatoria"),
             }),
             defineField({ name: "author", title: "Autor", type: "string" }),
           ],
         }),
       ],
+      validation: (Rule) => Rule.max(3).error("Máximo 3 testimonios"),
     }),
   ],
 });

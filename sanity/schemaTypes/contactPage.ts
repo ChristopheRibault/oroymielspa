@@ -9,6 +9,7 @@ export default defineType({
       name: "title",
       title: "Título",
       type: "string",
+      validation: (Rule) => Rule.required().error("El título es obligatorio"),
     }),
     defineField({
       name: "intro",
