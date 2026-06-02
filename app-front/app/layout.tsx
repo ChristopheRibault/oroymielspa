@@ -92,7 +92,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col">
+        <div className="mx-auto flex w-full max-w-5xl flex-col">
           <Header settings={settings} />
           <div className="flex-1">{children}</div>
         </div>

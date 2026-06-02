@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   ]);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oroymiel.com";
-  const title = settings?.siteTitle ?? "Oro y Miel Spa";
+  const title = settings?.siteTitle;
   const description = settings?.siteDescription;
   const imageUrl =
     homePage?.heroImage?.asset?.url ?? settings?.logo?.asset?.url;

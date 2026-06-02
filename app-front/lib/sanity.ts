@@ -8,8 +8,8 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2025-01-01";
 
 export type SiteSettings = {
-  siteTitle?: string;
-  siteDescription?: string;
+  siteTitle: string;
+  siteDescription: string;
   address?: string;
   openingHours?: string;
   bookingUrl?: string;
@@ -18,14 +18,14 @@ export type SiteSettings = {
   socialMedia?: {
     instagram?: {
       label?: string;
-      url?: string;
+      url: string;
     };
     facebook?: {
       label?: string;
-      url?: string;
+      url: string;
     };
   };
-  logo?: {
+  logo: {
     alt?: string;
     asset?: {
       url?: string;
@@ -34,8 +34,8 @@ export type SiteSettings = {
 };
 
 export type HomePageData = {
-  heroTitle?: string;
-  heroText?: PortableTextBlock[];
+  heroTitle: string;
+  heroText: PortableTextBlock[];
   heroImage?: {
     alt?: string;
     asset?: {
@@ -58,8 +58,8 @@ export type HomePageData = {
     };
   }>;
   about?: {
-    title?: string;
-    text?: PortableTextBlock[];
+    title: string;
+    text: PortableTextBlock[];
     image?: {
       asset?: {
         url?: string;
@@ -67,13 +67,13 @@ export type HomePageData = {
     };
   };
   testimonials?: Array<{
-    quote?: string;
+    quote: string;
     author?: string;
   }>;
 };
 
 export type ContactPageData = {
-  title?: string;
+  title: string;
   intro?: PortableTextBlock[];
 };
 
@@ -90,9 +90,9 @@ export type PortableTextBlock = {
 };
 
 export type ServicePageData = {
-  title?: string;
-  services?: Array<{
-    title?: string;
+  title: string;
+  services: Array<{
+    title: string;
     image?: {
       alt?: string;
       asset?: {
@@ -100,8 +100,8 @@ export type ServicePageData = {
       };
     };
     services?: Array<{
-      name?: string;
-      description?: string;
+      name: string;
+      description: string;
       price?: string;
     }>;
   }>;
@@ -137,7 +137,7 @@ export const getSiteSettings = cache(async function getSiteSettings() {
     return null;
   }
 
-  const payload = (await response.json()) as { result: SiteSettings | null };
+  const payload = (await response.json()) as { result: SiteSettings };
 
   return payload.result;
 });
