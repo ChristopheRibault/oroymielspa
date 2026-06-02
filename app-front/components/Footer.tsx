@@ -19,8 +19,8 @@ export default function Footer({ settings }: FooterProps) {
     Boolean(settings?.openingHours);
 
   return (
-    <footer className="mt-16 border-t border-[#dccdbe] bg-[#f4eadf] px-6 py-10 text-[#5f534a] sm:px-10">
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-[1.2fr_0.8fr_1fr]">
+    <footer className="mt-16 w-full border-t border-[#dccdbe] bg-[#f4eadf] text-[#5f534a]">
+      <div className="mx-auto grid w-full max-w-5xl gap-8 px-6 py-10 md:grid-cols-[1.2fr_0.8fr_1fr] sm:px-10">
         <div className="space-y-4">
           <Logo
             src={settings?.logo?.asset?.url}

@@ -87,13 +87,15 @@ export default async function RootLayout({
         cormorantGaramond.variable,
       )}
     >
-      <body className="flex min-h-screen flex-col">
+      <body className="min-h-screen w-full">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Header settings={settings} />
-        <div className="flex-1">{children}</div>
+        <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col">
+          <Header settings={settings} />
+          <div className="flex-1">{children}</div>
+        </div>
         <Footer settings={settings} />
       </body>
     </html>
